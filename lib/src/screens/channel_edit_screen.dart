@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChannelEditScreen extends StatefulWidget {
   @override
   ChannelEditScreenState createState() => ChannelEditScreenState();
 }
 
+class FormData {
+  String name;
+  String description ;
+  DateTime createdAt = DateTime.now();
+}
+
 class ChannelEditScreenState extends State<ChannelEditScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final FormData data = FormData();
 
   @override
   Widget build(BuildContext context) {
@@ -31,33 +39,77 @@ class ChannelEditScreenState extends State<ChannelEditScreen> {
       body: SafeArea(
         child:
         Form(
-          key: _formKey,
+          key: formKey,
           child: ListView(
             padding: const EdgeInsets.all(20.0),
             children: <Widget>[
-              TextFormField(
-                decoration: const InputDecoration(
-                  icon: const Icon(Icons.person),
-                  hintText: 'channel name',
-                  labelText: 'name',
-                ),
-              ),
-
-              TextFormField(
-                decoration: const InputDecoration(
-                  icon: const Icon(Icons.person),
-                  hintText: 'description',
-                  labelText: 'description',
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(top:8.0),
-              ),
+              nameField(),
+              descriptionField(),
+              Padding(padding: const EdgeInsets.only(top:8.0)),
+              submitButton(),
             ],
           ),
         ),
       ),
+    );
+  }
+  
+  Widget nameField() {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: 'Channel Name',
+        hintText: '5 channel',
+      ),
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Name is required';
+        }
+        return null;
+      },
+      onSaved: (String value) {
+        data.name = value;
+      },
+      initialValue: data.name,
+    );
+  }
+  
+  Widget descriptionField() {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: 'Description',
+        hintText: 'This is 5 channel.',
+      ),
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Description is required';
+        }
+        return null;
+      },
+      onSaved: (String value) {
+        data.description = value;
+      },
+      initialValue: data.description,
+    );
+  }
+
+  Widget submitButton() {
+    final mainReference = Firestore.instance.collection('channel').document();
+    return RaisedButton(
+      color: Colors.blue,
+      child: Text('Submit!'),
+      onPressed: () {
+        if (formKey.currentState.validate()) {
+          formKey.currentState.save();
+          mainReference.setData(
+              {
+                'name': data.name,
+                'description': data.description,
+                'created_at': data.createdAt
+              }
+          );
+          Navigator.pop(context);
+        }
+      },
     );
   }
 }

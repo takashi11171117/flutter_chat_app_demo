@@ -44,7 +44,6 @@ class ChannelListScreenState extends State<ChannelListScreen> {
   }
 
   Widget buildListItem(BuildContext context, DocumentSnapshot document){
-    print(document['name']);
     return Card(
       child: Column(
           mainAxisSize: MainAxisSize.min,
