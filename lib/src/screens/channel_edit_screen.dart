@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChannelEditScreen extends StatefulWidget {
+  ChannelEditScreen(this.document);
+  final DocumentSnapshot document;
+
   @override
   ChannelEditScreenState createState() => ChannelEditScreenState();
 }
@@ -18,6 +21,20 @@ class ChannelEditScreenState extends State<ChannelEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    DocumentReference mainReference;
+    mainReference = Firestore.instance.collection('channel').document();
+    bool deleteFlg = false;
+    if (widget.document != null) {
+      if(data.name == null && data.description == null) {
+        data.name = widget.document['name'];
+        data.description = widget.document['description'];
+        data.createdAt = widget.document['created_at'].toDate();
+      }
+      mainReference = Firestore.instance.collection('channel').
+      document(widget.document.documentID);
+      deleteFlg = true;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Channel'),
@@ -26,12 +43,25 @@ class ChannelEditScreenState extends State<ChannelEditScreen> {
               icon: Icon(Icons.save),
               onPressed: () {
                 print("Pressed save button");
+                if (formKey.currentState.validate()) {
+                  formKey.currentState.save();
+                  mainReference.setData(
+                      {
+                        'name': data.name,
+                        'description': data.description,
+                        'created_at': data.createdAt
+                      }
+                  );
+                  Navigator.pop(context);
+                }
               }
           ),
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: () {
+            onPressed: !deleteFlg ? null : () {
               print("Pressed delete button");
+              mainReference.delete();
+              Navigator.pop(context);
             },
           ),
         ],
@@ -46,7 +76,6 @@ class ChannelEditScreenState extends State<ChannelEditScreen> {
               nameField(),
               descriptionField(),
               Padding(padding: const EdgeInsets.only(top:8.0)),
-              submitButton(),
             ],
           ),
         ),
@@ -89,27 +118,6 @@ class ChannelEditScreenState extends State<ChannelEditScreen> {
         data.description = value;
       },
       initialValue: data.description,
-    );
-  }
-
-  Widget submitButton() {
-    final mainReference = Firestore.instance.collection('channel').document();
-    return RaisedButton(
-      color: Colors.blue,
-      child: Text('Submit!'),
-      onPressed: () {
-        if (formKey.currentState.validate()) {
-          formKey.currentState.save();
-          mainReference.setData(
-              {
-                'name': data.name,
-                'description': data.description,
-                'created_at': data.createdAt
-              }
-          );
-          Navigator.pop(context);
-        }
-      },
     );
   }
 }

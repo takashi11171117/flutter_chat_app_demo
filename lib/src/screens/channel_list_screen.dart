@@ -35,7 +35,7 @@ class ChannelListScreenState extends State<ChannelListScreen> {
               context,
               MaterialPageRoute(
                   settings: const RouteSettings(name: "/new"),
-                  builder: (BuildContext context) => ChannelEditScreen()
+                  builder: (BuildContext context) => ChannelEditScreen(null)
               ),
             );
           }
@@ -61,6 +61,13 @@ class ChannelListScreenState extends State<ChannelListScreen> {
                         onPressed: ()
                         {
                           print("Pressed edit button");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                settings: const RouteSettings(name: "/edit"),
+                                builder: (BuildContext context) => ChannelEditScreen(document)
+                            ),
+                          );
                         }
                     ),
                   ],
