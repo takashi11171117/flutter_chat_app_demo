@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'channel_edit_screen.dart';
+import '../components/login_dialog.dart';
 
 class ChannelListScreen extends StatefulWidget {
   @override
@@ -12,6 +13,15 @@ class ChannelListScreenState extends State<ChannelListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Channel List"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              print("login");
+              loginDialog(context);
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
