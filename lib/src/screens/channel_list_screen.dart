@@ -1,15 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'channel_edit_screen.dart';
 import '../components/login_dialog.dart';
+import '../../bloc/channel_bloc_provider.dart';
+import '../../bloc/channel_bloc.dart';
+import '../../model/channel.dart';
 
-class ChannelListScreen extends StatefulWidget {
+class ChannelListScreenStateful extends StatefulWidget {
   @override
-  ChannelListScreenState createState() => ChannelListScreenState();
+  _ChannelListScreenStatefulState createState() => _ChannelListScreenStatefulState();
 }
 
-class ChannelListScreenState extends State<ChannelListScreen> {
+class _ChannelListScreenStatefulState extends State<ChannelListScreenStateful> {
+  ChannelBloc _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = ChannelBloc();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return ChannelBlocProvider(
+      bloc: _bloc,
+      child: ChannelListScreen(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
+}
+
+class ChannelListScreen extends StatelessWidget {
+  Widget build(context) {
+    final bloc = ChannelBlocProvider.of(context);
+    bloc.fetchChannels();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Channel List"),
@@ -25,14 +53,14 @@ class ChannelListScreenState extends State<ChannelListScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: StreamBuilder<QuerySnapshot>(
-            stream: Firestore.instance.collection('channel').snapshots(),
-            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+        child: StreamBuilder(
+            stream: bloc.channels,
+            builder: (context, snapshot){
               if (!snapshot.hasData) return const Text('Loading...');
               return ListView.builder(
-                itemCount: snapshot.data.documents.length,
+                itemCount: snapshot.data.length,
                 padding: const EdgeInsets.only(top: 10.0),
-                itemBuilder: (context, index) => buildListItem(context, snapshot.data.documents[index]),
+                itemBuilder: (context, index) => buildListItem(context, snapshot.data[index]),
               );
             }
         ),
@@ -40,28 +68,28 @@ class ChannelListScreenState extends State<ChannelListScreen> {
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            print("Pressed new button");
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  settings: const RouteSettings(name: "/new"),
-                  builder: (BuildContext context) => ChannelEditScreen(null)
-              ),
-            );
+            // print("Pressed new button");
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //       settings: const RouteSettings(name: "/new"),
+            //       builder: (context) => ChannelEditScreen(null)
+            //   ),
+            // );
           }
       ),
     );
   }
 
-  Widget buildListItem(BuildContext context, DocumentSnapshot document){
+  Widget buildListItem(BuildContext context, Channel document){
     return Card(
       child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.android),
-              title: Text(document['name']),
-              subtitle: Text(document['description']),
+              title: Text(document.name),
+              subtitle: Text(document.description),
             ),
             ButtonTheme.bar(
                 child: ButtonBar(
@@ -71,13 +99,13 @@ class ChannelListScreenState extends State<ChannelListScreen> {
                         onPressed: ()
                         {
                           print("Pressed edit button");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                settings: const RouteSettings(name: "/edit"),
-                                builder: (BuildContext context) => ChannelEditScreen(document)
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       settings: const RouteSettings(name: "/edit"),
+                          //       builder: (BuildContext context) => ChannelEditScreen(document)
+                          //   ),
+                          // );
                         }
                     ),
                   ],

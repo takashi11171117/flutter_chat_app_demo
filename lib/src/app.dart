@@ -9,7 +9,7 @@ class App extends StatelessWidget {
       title: 'Channel',
       routes:  <String, WidgetBuilder>{
         '/': (_) => Splash(),
-        '/list': (_) => ChannelListScreen(),
+        '/list': (_) => ChannelListScreenStateful(),
       }
     );
   }

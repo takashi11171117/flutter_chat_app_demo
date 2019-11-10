@@ -91,8 +91,6 @@ Widget cancelButton(BuildContext context) {
 }
 
 Widget submitButton(BuildContext context, GlobalKey<FormState> formKey, String email, String password) {
-  print(email);
-  print(password);
   return FlatButton(
       child: const Text('Submit'),
       onPressed: () {
@@ -140,7 +138,6 @@ void createUser(BuildContext context, String email, String password) async {
     await _auth.createUserWithEmailAndPassword(email: email, password: password);
     Navigator.pushNamedAndRemoveUntil(context, "/", (_) => false);
   } catch (e) {
-    print(e);
     Fluttertoast.showToast(msg: "Registering of firebase is failed.");
   }
 }
