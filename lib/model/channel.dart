@@ -5,6 +5,7 @@ class Channel extends Document<Channel> {
   Channel({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values);
 
+  
   String name;
   String description;
 
