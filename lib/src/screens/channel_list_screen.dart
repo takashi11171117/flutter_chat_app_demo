@@ -5,6 +5,15 @@ import '../../bloc/channel_bloc.dart';
 import '../../model/channel.dart';
 import '../../utils/date_util.dart';
 
+class ChannelList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ChannelListScreenStateful(),
+    );
+  }
+}
+
 class ChannelListScreenStateful extends StatefulWidget {
   @override
   _ChannelListScreenStatefulState createState() => _ChannelListScreenStatefulState();

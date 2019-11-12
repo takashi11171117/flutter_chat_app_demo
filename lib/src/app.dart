@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/channel_list_screen.dart';
+import 'app_page.dart';
 import 'screens/splash.dart';
 
 class App extends StatelessWidget {
@@ -8,8 +8,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Channel',
       routes:  <String, WidgetBuilder>{
-        '/': (_) => Splash(),
-        '/list': (_) => ChannelListScreenStateful(),
+        '/splash': (_) => Splash(),
+        '/': (_) => AppPage(),
       }
     );
   }

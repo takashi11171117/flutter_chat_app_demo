@@ -9,7 +9,7 @@ class ChannelBloc implements Bloc {
 
   final _loadFirstPageController = PublishSubject<void>();
   final _loadMoreController = PublishSubject<void>();
-  final _limit = 6;
+  final _limit = 7;
   var _isLoading = false;
   Timestamp _lastTimestamp;
   List<Channel> allChannels = [];

@@ -23,7 +23,7 @@ void getUser(BuildContext context) async {
     if (firebaseUser == null) {
       await _auth.signInAnonymously();
     }
-    Navigator.pushReplacementNamed(context, "/list");
+    Navigator.pushReplacementNamed(context, "/app_page");
   } catch (e) {
     Fluttertoast.showToast(msg: "Connecting of firebase is failed.");
   }
