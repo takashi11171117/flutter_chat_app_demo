@@ -21,6 +21,11 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def googleMapApikey = localProperties.getProperty('android.geoApikey')
+if (googleMapApikey == null) {
+    googleMapApikey = ''
+}
+
 apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -40,6 +45,7 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        manifestPlaceholders = [androidGeoApikey: googleMapApikey]
     }
 
     buildTypes {
