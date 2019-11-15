@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'custom_single_child_page.dart';
+import 'inherited_widget_page.dart';
 
 class OtherScreen extends StatelessWidget {
   @override
@@ -28,6 +29,8 @@ class _OtherState extends State<Other> {
     _dataSource = [
       _DataSource('CustomSingleChild', CustomSingleChildPage(),
           _ColorSet(0xFFD32F2F, 0xFFFFCDD2)),
+      _DataSource('InheritedWidget', InheritedWidgetPage(),
+          _ColorSet(0xFFD32F3A, 0xFFFFCD4F)),
     ];
     super.initState();
   }
