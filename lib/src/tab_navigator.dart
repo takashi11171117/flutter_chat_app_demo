@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'screens/channel_list_screen.dart';
 import 'screens/hoge_screen.dart';
+import 'screens/other/other_screen.dart';
 
 List<Widget> _widgetList = [
   HogeScreen(),
   ChannelList(),
+  OtherScreen(),
 ];
 
 class TabNavigatorRoutes {

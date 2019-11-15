@@ -16,6 +16,7 @@ class _AppPageState extends State<AppPage> {
   Map<int, GlobalKey<NavigatorState>> _navigatorKeys = {
     0: GlobalKey<NavigatorState>(),
     1: GlobalKey<NavigatorState>(),
+    2: GlobalKey<NavigatorState>(),
   };
 
   void _onItemTapped(int index) {
@@ -38,18 +39,17 @@ class _AppPageState extends State<AppPage> {
             children: <Widget>[
               _buildOffstageNavigator(0),
               _buildOffstageNavigator(1),
+              _buildOffstageNavigator(2),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.map),
-                  title: Text('map')
-              ),
+                  icon: Icon(Icons.map), title: Text('map')),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.map),
-                  title: Text('map')
-              ),
+                  icon: Icon(Icons.map), title: Text('map')),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.map), title: Text('map')),
             ],
             type: BottomNavigationBarType.fixed,
             unselectedItemColor: Colors.black,
@@ -57,8 +57,7 @@ class _AppPageState extends State<AppPage> {
             selectedItemColor: Colors.amber[800],
             onTap: _onItemTapped,
           ),
-        )
-    );
+        ));
   }
 
   Widget _buildOffstageNavigator(int index) {
@@ -71,4 +70,3 @@ class _AppPageState extends State<AppPage> {
     );
   }
 }
-

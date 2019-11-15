@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class Channel extends Document<Channel> {
-  Channel({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values);
+  Channel({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
+  }) : super(id: id, snapshot: snapshot, values: values);
 
-  
   String name;
   String description;
 

@@ -13,17 +13,16 @@ import 'channel_bloc.dart';
 
 class ChannelBlocProvider extends InheritedWidget {
   final ChannelBloc bloc;
-  ChannelBlocProvider({
-    Key key,
-    @required Widget child,
-    @required this.bloc
-  }) : super(key: key, child: child);
-  
+  ChannelBlocProvider({Key key, @required Widget child, @required this.bloc})
+      : super(key: key, child: child);
+
   static ChannelBloc of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(ChannelBlocProvider) as ChannelBlocProvider).bloc;
+    return (context.inheritFromWidgetOfExactType(ChannelBlocProvider)
+            as ChannelBlocProvider)
+        .bloc;
   }
 
   @override
-  bool updateShouldNotify(ChannelBlocProvider oldWidget) => bloc != oldWidget.bloc;
-  
+  bool updateShouldNotify(ChannelBlocProvider oldWidget) =>
+      bloc != oldWidget.bloc;
 }

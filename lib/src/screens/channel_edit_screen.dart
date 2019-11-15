@@ -11,7 +11,7 @@ class ChannelEditScreen extends StatefulWidget {
 
 class FormData {
   String name;
-  String description ;
+  String description;
   DateTime createdAt = DateTime.now();
 }
 
@@ -25,13 +25,14 @@ class ChannelEditScreenState extends State<ChannelEditScreen> {
     mainReference = Firestore.instance.collection('channel').document();
     bool deleteFlg = false;
     if (widget.document != null) {
-      if(data.name == null && data.description == null) {
+      if (data.name == null && data.description == null) {
         data.name = widget.document['name'];
         data.description = widget.document['description'];
         data.createdAt = widget.document['created_at'].toDate();
       }
-      mainReference = Firestore.instance.collection('channel').
-      document(widget.document.documentID);
+      mainReference = Firestore.instance
+          .collection('channel')
+          .document(widget.document.documentID);
       deleteFlg = true;
     }
 
@@ -45,44 +46,42 @@ class ChannelEditScreenState extends State<ChannelEditScreen> {
                 print("Pressed save button");
                 if (formKey.currentState.validate()) {
                   formKey.currentState.save();
-                  mainReference.setData(
-                      {
-                        'name': data.name,
-                        'description': data.description,
-                        'created_at': data.createdAt
-                      }
-                  );
+                  mainReference.setData({
+                    'name': data.name,
+                    'description': data.description,
+                    'created_at': data.createdAt
+                  });
                   Navigator.pop(context);
                 }
-              }
-          ),
+              }),
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: !deleteFlg ? null : () {
-              print("Pressed delete button");
-              mainReference.delete();
-              Navigator.pop(context);
-            },
+            onPressed: !deleteFlg
+                ? null
+                : () {
+                    print("Pressed delete button");
+                    mainReference.delete();
+                    Navigator.pop(context);
+                  },
           ),
         ],
       ),
       body: SafeArea(
-        child:
-        Form(
+        child: Form(
           key: formKey,
           child: ListView(
             padding: const EdgeInsets.all(20.0),
             children: <Widget>[
               nameField(),
               descriptionField(),
-              Padding(padding: const EdgeInsets.only(top:8.0)),
+              Padding(padding: const EdgeInsets.only(top: 8.0)),
             ],
           ),
         ),
       ),
     );
   }
-  
+
   Widget nameField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -101,7 +100,7 @@ class ChannelEditScreenState extends State<ChannelEditScreen> {
       initialValue: data.name,
     );
   }
-  
+
   Widget descriptionField() {
     return TextFormField(
       decoration: InputDecoration(

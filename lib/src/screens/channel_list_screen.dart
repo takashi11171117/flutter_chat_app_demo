@@ -16,7 +16,8 @@ class ChannelList extends StatelessWidget {
 
 class ChannelListScreenStateful extends StatefulWidget {
   @override
-  _ChannelListScreenStatefulState createState() => _ChannelListScreenStatefulState();
+  _ChannelListScreenStatefulState createState() =>
+      _ChannelListScreenStatefulState();
 }
 
 class _ChannelListScreenStatefulState extends State<ChannelListScreenStateful> {
@@ -49,7 +50,7 @@ class _ChannelListScreenStatefulState extends State<ChannelListScreenStateful> {
 
   void _onScroll() {
     if (_scrollController.offset + offsetVisibleThreshold >=
-      _scrollController.position.maxScrollExtent) {
+        _scrollController.position.maxScrollExtent) {
       _bloc.loadMore.add(null);
     }
   }
@@ -78,24 +79,24 @@ class ChannelListScreen extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: RefreshIndicator(
-          child: StreamBuilder(
-            stream:  _bloc.channels,
-            builder: (context, snapshot){
-              if (!snapshot.hasData) return CircularProgressIndicator();
-              return ListView.builder(
-                physics: AlwaysScrollableScrollPhysics(),
-                controller: _scrollController,
-                itemCount: snapshot.data.length,
-                padding: const EdgeInsets.only(top: 10.0),
-                itemBuilder: (context, index) => buildListItem(context, snapshot.data[index]),
-              );
-            },
-          ),
-          onRefresh: _bloc.refresh,
-        )
-      ),
+          padding: const EdgeInsets.all(8.0),
+          child: RefreshIndicator(
+            child: StreamBuilder(
+              stream: _bloc.channels,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return CircularProgressIndicator();
+                return ListView.builder(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  controller: _scrollController,
+                  itemCount: snapshot.data.length,
+                  padding: const EdgeInsets.only(top: 10.0),
+                  itemBuilder: (context, index) =>
+                      buildListItem(context, snapshot.data[index]),
+                );
+              },
+            ),
+            onRefresh: _bloc.refresh,
+          )),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
@@ -107,48 +108,40 @@ class ChannelListScreen extends StatelessWidget {
             //       builder: (context) => ChannelEditScreen(null)
             //   ),
             // );
-          }
-      ),
+          }),
     );
   }
 
-  Widget buildListItem(BuildContext context, Channel document){
+  Widget buildListItem(BuildContext context, Channel document) {
     return Card(
-      child: Column(
-          mainAxisSize: MainAxisSize.min,
+      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        ListTile(
+          leading: const Icon(Icons.android),
+          title: Text(document.name),
+          subtitle: Column(children: <Widget>[
+            Text(document.description),
+            Text(DateUtil.dateToString(
+                document.createdAt.toDate(), 'yyyy/MM/dd')),
+          ]),
+        ),
+        ButtonTheme.bar(
+            child: ButtonBar(
           children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.android),
-              title: Text(document.name),
-              subtitle: Column(
-                children: <Widget>[
-                  Text(document.description),
-                  Text(DateUtil.dateToString(document.createdAt.toDate(), 'yyyy/MM/dd')),
-                ]
-              ),
-            ),
-            ButtonTheme.bar(
-                child: ButtonBar(
-                  children: <Widget>[
-                    FlatButton(
-                        child: const Text("Edit"),
-                        onPressed: ()
-                        {
-                          print("Pressed edit button");
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       settings: const RouteSettings(name: "/edit"),
-                          //       builder: (BuildContext context) => ChannelEditScreen(document)
-                          //   ),
-                          // );
-                        }
-                    ),
-                  ],
-                )
-            ),
-          ]
-      ),
+            FlatButton(
+                child: const Text("Edit"),
+                onPressed: () {
+                  print("Pressed edit button");
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       settings: const RouteSettings(name: "/edit"),
+                  //       builder: (BuildContext context) => ChannelEditScreen(document)
+                  //   ),
+                  // );
+                }),
+          ],
+        )),
+      ]),
     );
   }
 }

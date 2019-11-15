@@ -8,10 +8,9 @@ class _InfoWidgetRouteLayout<T> extends SingleChildLayoutDelegate {
   final double height;
 
   _InfoWidgetRouteLayout(
-      {
-        @required this.mapsWidgetSize,
-        @required this.height,
-        @required this.width});
+      {@required this.mapsWidgetSize,
+      @required this.height,
+      @required this.width});
 
   /// Depending of the size of the marker or the widget, the offset in y direction has to be adjusted;
   /// If the appear to be of different size, the commented code can be uncommented and
@@ -131,17 +130,16 @@ class _InfoWidgetPopUpState extends State<InfoWidgetPopUp> {
         type: MaterialType.transparency,
         textStyle: widget.infoWidgetRoute.textStyle,
         child: ClipPath(
-          clipper: _InfoWidgetClipper(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                color: Colors.white,
-                padding: EdgeInsets.only(bottom: 10),
-                child: Center(child: widget.infoWidgetRoute.child),
-              ),
-            ],
-          )
-        ),
+            clipper: _InfoWidgetClipper(),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Center(child: widget.infoWidgetRoute.child),
+                ),
+              ],
+            )),
       ),
     );
   }

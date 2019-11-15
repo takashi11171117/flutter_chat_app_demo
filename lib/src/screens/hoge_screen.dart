@@ -55,7 +55,7 @@ class Hoge extends StatefulWidget {
 class _HogeState extends State<Hoge> {
   GoogleMapController _controller;
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
-  
+
   List<_MarkerInfo> _markerInfoList = [];
 
   CarouselSlider _carouselSlider;
@@ -74,7 +74,7 @@ class _HogeState extends State<Hoge> {
     _location();
     _locationService.onLocationChanged().listen((LocationData result) async {
       setState(() {
-        print("onLocationChanged ${result.latitude} ${result.longitude}");
+        // print("onLocationChanged ${result.latitude} ${result.longitude}");
       });
     });
     _setMarkers();
@@ -98,66 +98,67 @@ class _HogeState extends State<Hoge> {
       },
     );
     return Scaffold(
-      body: Container(
-        color: Colors.black,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              color: Colors.red,
-              child: _mapWidget(),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 200,
-                child: Column(
-                  children: <Widget>[
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        height: 60,
-                        color: Colors.transparent,
-                        child: ButtonTheme(
-                          minWidth: 40,
-                          height: 40,
-                          child: RaisedButton(
-                            child: Text('!', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                            color: Colors.deepPurple,
-                            shape: CircleBorder(
-                              side: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                                style: BorderStyle.solid,
-                              ),
+        body: Container(
+            color: Colors.black,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  color: Colors.red,
+                  child: _mapWidget(),
+                ),
+                Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                        height: 200,
+                        child: Column(
+                          children: <Widget>[
+                            Align(
+                                alignment: Alignment.topRight,
+                                child: Container(
+                                    height: 60,
+                                    color: Colors.transparent,
+                                    child: ButtonTheme(
+                                      minWidth: 40,
+                                      height: 40,
+                                      child: RaisedButton(
+                                        child: Text(
+                                          '!',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        color: Colors.deepPurple,
+                                        shape: CircleBorder(
+                                          side: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1.0,
+                                            style: BorderStyle.solid,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          if (_markerInfoList.isNotEmpty) {
+                                            setState(() {
+                                              _markerClear();
+                                            });
+                                          } else {
+                                            setState(() {
+                                              _setMarkers();
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ))),
+                            Container(
+                              height: 140,
+                              color: Colors.black.withOpacity(0.3),
+                              child: _carouselSlider.items.isNotEmpty
+                                  ? _carouselSlider
+                                  : null,
                             ),
-                            onPressed: () {
-                              if (_markerInfoList.isNotEmpty) {
-                                setState(() {
-                                  _markerClear();
-                                });
-                              } else {
-                                setState(() {
-                                  _setMarkers();
-                                });
-                              }
-                            },
-                          ),
-                        )
-                      )
-                    ),
-                    Container(
-                      height: 140,
-                      color: Colors.black.withOpacity(0.3),
-                      child: _carouselSlider.items.isNotEmpty ? _carouselSlider : null,
-                    ),
-                  ],
-                )
-              )
-            ),
-          ],
-        )
-      )
-    );
+                          ],
+                        ))),
+              ],
+            )));
   }
 
   /// カルーセルのアイテム達
@@ -177,24 +178,24 @@ class _HogeState extends State<Hoge> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     ClipRRect(
-                      child: Image.asset(item.imageName, fit: BoxFit.fitHeight,),
+                      child: Image.asset(
+                        item.imageName,
+                        fit: BoxFit.fitHeight,
+                      ),
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(4.0),
-                          bottomLeft: Radius.circular(4.0)
-                      ),
+                          bottomLeft: Radius.circular(4.0)),
                     ),
                     Expanded(
                         child: Container(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(item.title),
-                          ),
-                        )
-                    ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(item.title),
+                      ),
+                    )),
                   ],
                 ),
-              )
-          );
+              ));
         },
       );
     }).toList();
@@ -204,12 +205,13 @@ class _HogeState extends State<Hoge> {
     LocationData myLocation;
     try {
       myLocation = await _locationService.getLocation();
-      print("myLocation ${myLocation.latitude} ${myLocation.longitude}");
-    } catch(e){
-      if(e.code == 'PERMISSION_DENITED')
+      // print("myLocation ${myLocation.latitude} ${myLocation.longitude}");
+    } catch (e) {
+      if (e.code == 'PERMISSION_DENITED')
         print('Permission denited');
-      else if(e.code == 'PERMISSION_DENITED_NEVER_ASK')
-        print('Permission denited - please ask the user to enable it from the app settings');
+      else if (e.code == 'PERMISSION_DENITED_NEVER_ASK')
+        print(
+            'Permission denited - please ask the user to enable it from the app settings');
       myLocation = null;
     }
     setState(() {
@@ -225,7 +227,9 @@ class _HogeState extends State<Hoge> {
         mapType: MapType.normal,
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
-          target: _currentLocation != null ? LatLng(_currentLocation.latitude, _currentLocation.longitude) : LatLng(34.702485, 135.495951),
+          target: _currentLocation != null
+              ? LatLng(_currentLocation.latitude, _currentLocation.longitude)
+              : LatLng(34.702485, 135.495951),
           zoom: 14.0,
         ),
 //        circles: Set<Circle>()
@@ -240,22 +244,28 @@ class _HogeState extends State<Hoge> {
         myLocationButtonEnabled: false,
         markers: Set<Marker>.of(_markers.values),
         onCameraMoveStarted: () {
-          print("CameraPositionMove Start");
+          // print("CameraPositionMove Start");
         },
         onCameraMove: (CameraPosition position) async {
           _mapIdleSubscription?.cancel();
           _mapIdleSubscription = Future.delayed(Duration(milliseconds: 300))
               .asStream()
               .listen((_) {
-                if (_infoWidgetRoute != null) {
-                  Navigator.of(context, rootNavigator: true).push(_infoWidgetRoute)
-                      .then((newValue) { _infoWidgetRoute = null; },
-                  );
-                }
-              });
+            if (_infoWidgetRoute != null) {
+              Navigator.of(context, rootNavigator: true)
+                  .push(_infoWidgetRoute)
+                  .then(
+                (newValue) {
+                  _infoWidgetRoute = null;
+                },
+              );
+            }
+          });
           final region = await _controller.getVisibleRegion();
-          print("CameraPositionMoving position: ${position.target}, ${position.zoom}");
-          print("CameraPositionMoving region: ${region.northeast}, ${region.southwest}");
+          print(
+              "CameraPositionMoving position: ${position.target}, ${position.zoom}");
+          print(
+              "CameraPositionMoving region: ${region.northeast}, ${region.southwest}");
         },
         onCameraIdle: () {
           print("CameraPositionMove End");
@@ -279,7 +289,8 @@ class _HogeState extends State<Hoge> {
     _isTappingMarker = true;
 
     ///　カルーセル表示
-    _carouselSlider.animateToPage(point.index, duration: Duration(milliseconds: 300), curve: Curves.linear);
+    _carouselSlider.animateToPage(point.index,
+        duration: Duration(milliseconds: 300), curve: Curves.linear);
 
     /// MarkerWindow表示
     await _showInfoWindow(point);
@@ -293,10 +304,14 @@ class _HogeState extends State<Hoge> {
         children: <Widget>[
           Container(
               child: Align(
-                alignment: Alignment.center,
-                child: Image.asset(point.imageName, fit: BoxFit.fill, width: 150, height: 100,),
-              )
-          ),
+            alignment: Alignment.center,
+            child: Image.asset(
+              point.imageName,
+              fit: BoxFit.fill,
+              width: 150,
+              height: 100,
+            ),
+          )),
           Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -306,12 +321,11 @@ class _HogeState extends State<Hoge> {
                   child: Center(
                     child: Text(
                       point.title,
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
-                  )
-              )
-          ),
+                  ))),
         ],
       ),
       buildContext: context,
@@ -338,19 +352,39 @@ class _HogeState extends State<Hoge> {
   /// マーカーセット
   void _setMarkerInfoList() {
     _markerInfoList = [
-      _MarkerInfo(index: 0, markerId: MarkerId('0'), title: 'AAA', imageName: 'assets/abundance.jpg',
+      _MarkerInfo(
+        index: 0,
+        markerId: MarkerId('0'),
+        title: 'AAA',
+        imageName: 'assets/abundance.jpg',
         location: LatLng(34.701895, 135.497085),
       ),
-      _MarkerInfo(index: 1, markerId: MarkerId('1'), title: 'BBB', imageName: 'assets/bicycle.jpg',
+      _MarkerInfo(
+        index: 1,
+        markerId: MarkerId('1'),
+        title: 'BBB',
+        imageName: 'assets/bicycle.jpg',
         location: LatLng(34.704400, 135.500518),
       ),
-      _MarkerInfo(index: 2, markerId: MarkerId('2'), title: 'CCC', imageName: 'assets/buildings.jpg',
+      _MarkerInfo(
+        index: 2,
+        markerId: MarkerId('2'),
+        title: 'CCC',
+        imageName: 'assets/buildings.jpg',
         location: LatLng(34.704436, 135.495583),
       ),
-      _MarkerInfo(index: 3, markerId: MarkerId('3'), title: 'DDD', imageName: 'assets/coffee.jpg',
+      _MarkerInfo(
+        index: 3,
+        markerId: MarkerId('3'),
+        title: 'DDD',
+        imageName: 'assets/coffee.jpg',
         location: LatLng(34.709168, 135.486271),
       ),
-      _MarkerInfo(index: 4, markerId: MarkerId('4'), title: 'EEE', imageName: 'assets/woman.jpg',
+      _MarkerInfo(
+        index: 4,
+        markerId: MarkerId('4'),
+        title: 'EEE',
+        imageName: 'assets/woman.jpg',
         location: LatLng(34.700030, 135.485927),
       ),
     ];
@@ -358,7 +392,8 @@ class _HogeState extends State<Hoge> {
 
   void _setMarkers() async {
     _setMarkerInfoList();
-    final icon = await GoogleMapHelper.getBitmapFromAsset(100, 'assets/marker.png');
+    final icon =
+        await GoogleMapHelper.getBitmapFromAsset(100, 'assets/marker.png');
     setState(() {
       _markerInfoList.forEach((item) {
         _markers[item.markerId] = Marker(
@@ -366,8 +401,7 @@ class _HogeState extends State<Hoge> {
             position: item.location,
             icon: icon,
 //          infoWindow: InfoWindow(title: item.title, snippet: 'title'),
-            onTap: () => _onTap(item)
-        );
+            onTap: () => _onTap(item));
       });
     });
   }
@@ -384,5 +418,6 @@ class _MarkerInfo {
   final String title;
   final String imageName;
   final LatLng location;
-  _MarkerInfo({this.index, this.markerId, this.title, this.imageName, this.location});
+  _MarkerInfo(
+      {this.index, this.markerId, this.title, this.imageName, this.location});
 }

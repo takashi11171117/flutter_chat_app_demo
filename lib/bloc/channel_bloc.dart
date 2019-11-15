@@ -18,19 +18,32 @@ class ChannelBloc implements Bloc {
     _loadFirstPageController.stream.listen((_) async {
       if (!_isLoading) {
         _isLoading = true;
-        final snapshot =  await firestoreInstance().collection(Document.path<Channel>()).orderBy('createdAt', descending: true).limit(_limit).getDocuments();
-        allChannels = snapshot.documents.map((item) => Channel(snapshot: item)).toList();
+        final snapshot = await firestoreInstance()
+            .collection(Document.path<Channel>())
+            .orderBy('createdAt', descending: true)
+            .limit(_limit)
+            .getDocuments();
+        allChannels =
+            snapshot.documents.map((item) => Channel(snapshot: item)).toList();
         _channelsController.sink.add(allChannels);
         _lastTimestamp = allChannels.last.createdAt;
         _isLoading = false;
       }
     });
 
-    _loadMoreController.stream.throttleTime(Duration(milliseconds: 500)).listen((_) async {
+    _loadMoreController.stream
+        .throttleTime(Duration(milliseconds: 500))
+        .listen((_) async {
       if (!_isLoading) {
         _isLoading = true;
-        final snapshot =  await firestoreInstance().collection(Document.path<Channel>()).where("createdAt", isLessThan: _lastTimestamp).orderBy("createdAt", descending: true).limit(_limit).getDocuments();
-        final channels = snapshot.documents.map((item) => Channel(snapshot: item)).toList();
+        final snapshot = await firestoreInstance()
+            .collection(Document.path<Channel>())
+            .where("createdAt", isLessThan: _lastTimestamp)
+            .orderBy("createdAt", descending: true)
+            .limit(_limit)
+            .getDocuments();
+        final channels =
+            snapshot.documents.map((item) => Channel(snapshot: item)).toList();
         allChannels = <Channel>[
           ...allChannels,
           ...channels,
